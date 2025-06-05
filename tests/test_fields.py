@@ -1643,15 +1643,16 @@ class TestPytzNaiveDayLightSavingTimeTimeZoneDateTimeField(FieldValues):
     }
     outputs = {}
 
-    class MockTimezone(pytz.BaseTzInfo):
-        @staticmethod
-        def localize(value, is_dst):
-            raise pytz.InvalidTimeError()
+    if pytz:
+        class MockTimezone(pytz.BaseTzInfo):
+            @staticmethod
+            def localize(value, is_dst):
+                raise pytz.InvalidTimeError()
 
-        def __str__(self):
-            return 'America/New_York'
+            def __str__(self):
+                return 'America/New_York'
 
-    field = serializers.DateTimeField(default_timezone=MockTimezone())
+        field = serializers.DateTimeField(default_timezone=MockTimezone())
 
 
 @patch('rest_framework.utils.timezone.datetime_ambiguous', return_value=True)
